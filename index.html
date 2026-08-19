@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NSHY_DESKTOP // OS v1.0</title>
+  <title>NSHY_DESKTOP // OS v2.5</title>
   
   <!-- Web App Manifest for PWA Support -->
   <link rel="manifest" href="data:application/json,{
@@ -11,19 +11,19 @@
     &quot;short_name&quot;: &quot;nshy OS&quot;,
     &quot;start_url&quot;: &quot;.&quot;,
     &quot;display&quot;: &quot;standalone&quot;,
-    &quot;background_color&quot;: &quot;#e5e5e7&quot;,
+    &quot;background_color&quot;: &quot;#e2e2e4&quot;,
     &quot;theme_color&quot;: &quot;#d1d1d6&quot;
   }">
 
   <style>
     :root {
-      --bg-color: #e8e8ea;
+      --bg-color: #e2e2e4;
       --panel-bg: #ffffff;
-      --border-dark: #7a7a80;
+      --border-dark: #6e6e73;
       --border-light: #ffffff;
       --text-main: #121214;
       --text-muted: #6e6e73;
-      --accent-gray: #d4d4d8;
+      --accent-gray: #d1d1d6;
       --accent-hover: #b8b8c0;
     }
 
@@ -37,55 +37,79 @@
     body {
       background-color: var(--bg-color);
       color: var(--text-main);
-      padding: 16px;
-      min-height: 100vh;
+      padding: 12px;
+      height: 100vh;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      background-image: 
-        radial-gradient(var(--border-dark) 0.75px, transparent 0.75px),
-        linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px);
-      background-size: 16px 16px, 100% 100%;
+      gap: 10px;
+      overflow: hidden;
+      background-image: radial-gradient(var(--border-dark) 0.75px, transparent 0.75px);
+      background-size: 14px 14px;
     }
 
-    /* Top Frame Bar */
+    /* Top Frame Header */
     .header-frame {
       border: 2px solid var(--border-dark);
       background: var(--panel-bg);
-      padding: 10px 16px;
+      padding: 8px 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: inset 1px 1px 0px var(--border-light), 3px 3px 0px rgba(0,0,0,0.15);
+      box-shadow: inset 1px 1px 0px var(--border-light), 2px 2px 0px rgba(0,0,0,0.1);
     }
 
     .title-block h1 {
-      font-size: 1.25rem;
-      letter-spacing: 2.5px;
+      font-size: 1.1rem;
+      letter-spacing: 2px;
       text-transform: uppercase;
       font-weight: 800;
     }
 
-    .status-block {
+    .system-controls {
       display: flex;
-      gap: 16px;
-      font-size: 0.85rem;
-      color: var(--text-muted);
+      gap: 8px;
+      align-items: center;
     }
 
-    /* Main Desktop Grid */
-    .grid-layout {
-      display: grid;
-      grid-template-columns: 240px 1fr 300px;
-      gap: 12px;
+    /* Navigation Bar (Tabs) */
+    .nav-tabs {
+      display: flex;
+      gap: 4px;
+    }
+
+    .tab-btn {
+      background: var(--accent-gray);
+      border: 2px solid var(--border-dark);
+      border-bottom: none;
+      padding: 6px 14px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      cursor: pointer;
+      text-transform: uppercase;
+    }
+
+    .tab-btn.active {
+      background: var(--panel-bg);
+      box-shadow: inset 0px 2px 0px var(--text-main);
+    }
+
+    /* Main Content Container */
+    .tab-content {
+      display: none;
       flex-grow: 1;
+      height: calc(100vh - 110px);
+    }
+
+    .tab-content.active {
+      display: flex;
+      gap: 10px;
     }
 
     /* Panels & Retro Framing */
     .panel {
       background: var(--panel-bg);
       border: 2px solid var(--border-dark);
-      box-shadow: inset 1px 1px 0px var(--border-light), 3px 3px 0px rgba(0,0,0,0.08);
+      box-shadow: inset 1px 1px 0px var(--border-light), 2px 2px 0px rgba(0,0,0,0.08);
       display: flex;
       flex-direction: column;
     }
@@ -104,14 +128,15 @@
     }
 
     .panel-body {
-      padding: 12px;
+      padding: 10px;
       flex-grow: 1;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
+      overflow-y: auto;
     }
 
-    /* Navigation Link Box */
+    /* Links Component */
     .link-list {
       list-style: none;
       display: flex;
@@ -119,66 +144,27 @@
       gap: 4px;
     }
 
-    .link-list li a {
-      color: var(--text-main);
-      text-decoration: none;
+    .link-item {
       display: flex;
       align-items: center;
-      gap: 6px;
-      padding: 6px 8px;
+      justify-content: space-between;
       border: 1px solid var(--border-dark);
       background: #f4f4f6;
+      padding: 4px 6px;
+    }
+
+    .link-item a {
+      color: var(--text-main);
+      text-decoration: none;
       font-size: 0.85rem;
       font-weight: bold;
-      transition: all 0.1s ease;
-    }
-
-    .link-list li a:hover {
-      background: var(--text-main);
-      color: var(--panel-bg);
-    }
-
-    /* Photobooth Styling */
-    .booth-container {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    #webcam-view {
-      width: 100%;
-      height: 190px;
-      background: #111;
-      object-fit: cover;
-      filter: grayscale(100%) contrast(115%);
-      border: 2px solid var(--border-dark);
-    }
-
-    .booth-controls {
-      display: flex;
-      gap: 8px;
     }
 
     /* Inputs & UI Controls */
-    textarea {
-      width: 100%;
-      height: 100%;
-      min-height: 200px;
+    input[type="text"], textarea {
       background: #fafafa;
       border: 1px solid var(--border-dark);
-      padding: 10px;
-      color: var(--text-main);
-      font-family: inherit;
-      resize: none;
-      outline: none;
-      line-height: 1.4;
-    }
-
-    input[type="text"] {
-      width: 100%;
-      background: #fafafa;
-      border: 1px solid var(--border-dark);
-      padding: 6px 8px;
+      padding: 6px;
       color: var(--text-main);
       font-family: inherit;
       outline: none;
@@ -187,57 +173,137 @@
     button {
       background: var(--accent-gray);
       border: 1px solid var(--border-dark);
-      padding: 6px 12px;
+      padding: 4px 8px;
       font-family: inherit;
       font-size: 0.8rem;
       font-weight: bold;
       cursor: pointer;
-      box-shadow: inset 1px 1px 0px var(--border-light);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
 
-    button:hover {
-      background: var(--accent-hover);
+    button:hover { background: var(--accent-hover); }
+
+    /* Notion-Style Workspace */
+    .notion-container {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 10px;
+      width: 100%;
+      height: 100%;
     }
 
-    button:active {
-      box-shadow: inset -1px -1px 0px var(--border-light);
-    }
-
-    /* Reminders List Styling */
-    .reminder-item {
+    .pages-sidebar {
+      border: 2px solid var(--border-dark);
+      background: var(--panel-bg);
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 6px 8px;
-      background: #f4f4f6;
-      border: 1px solid var(--border-dark);
+      flex-direction: column;
+    }
+
+    .page-item {
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--border-dark);
+      cursor: pointer;
       font-size: 0.85rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    .reminder-item span {
-      word-break: break-all;
+    .page-item.active {
+      background: var(--accent-gray);
+      font-weight: bold;
     }
 
-    .remove-btn {
+    .editor-body {
+      border: 2px solid var(--border-dark);
+      background: var(--panel-bg);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      overflow-y: auto;
+    }
+
+    .editor-toolbar {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      border-bottom: 2px solid var(--border-dark);
+      padding-bottom: 8px;
+    }
+
+    .editor-title {
+      font-size: 1.3rem;
+      border: none !important;
       background: transparent;
-      border: none;
-      box-shadow: none;
-      color: var(--text-muted);
-      padding: 0 4px;
-      font-size: 1rem;
+      outline: none;
+      font-weight: bold;
+      flex-grow: 1;
     }
 
-    .remove-btn:hover {
-      color: var(--text-main);
+    .editor-content {
+      width: 100%;
+      min-height: 180px;
+      border: none !important;
+      outline: none;
+      font-family: 'Consolas', monospace;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      resize: vertical;
       background: transparent;
     }
 
-    @media (max-width: 850px) {
-      .grid-layout {
-        grid-template-columns: 1fr;
-      }
+    /* Photobooth Frame Overlay */
+    .booth-stage {
+      position: relative;
+      width: 480px;
+      height: 360px;
+      margin: 0 auto;
+      border: 2px solid var(--border-dark);
+      background: #000;
+      overflow: hidden;
+    }
+
+    #webcam-feed {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(100%) contrast(115%);
+    }
+
+    .frame-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    /* Digicam Overlay */
+    .frame-digicam {
+      border: 12px solid #222;
+      color: #00ff00;
+      font-size: 0.75rem;
+      font-family: 'Courier New', monospace;
+      text-shadow: 0 0 2px #00ff00;
+    }
+
+    /* MS Paint Overlay */
+    .frame-mspaint {
+      border: 16px solid #c0c0c0;
+      border-top: 24px solid #000080;
+      box-shadow: inset 2px 2px 0px #fff, inset -2px -2px 0px #808080;
+    }
+    .frame-mspaint::before {
+      content: "MS Paint - Photobooth.bmp";
+      position: absolute;
+      top: -20px;
+      left: 4px;
+      color: #fff;
+      font-size: 11px;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -246,171 +312,353 @@
   <!-- Top System Header -->
   <header class="header-frame">
     <div class="title-block">
-      <h1>nshy-desktop // root</h1>
+      <h1>nshy-desktop // v2.5</h1>
     </div>
-    <div class="status-block">
-      <span>STATE: ONLINE</span>
-      <span id="clock">00:00:00</span>
+    <div class="system-controls">
+      <button onclick="exportData()">💾 BACKUP</button>
+      <label class="tab-btn" style="cursor: pointer; padding: 4px 8px; margin: 0; border: 1px solid var(--border-dark);">
+        📂 RESTORE
+        <input type="file" id="restore-file" accept=".json" onchange="importData(event)" style="display: none;">
+      </label>
+      <div id="clock">00:00:00</div>
     </div>
   </header>
 
-  <!-- Desktop Interactive Workspace -->
-  <main class="grid-layout">
-    
-    <!-- Left Navigation Frame -->
-    <section class="panel">
-      <div class="panel-header">
-        <span>[ LINKS ]</span>
-        <span>01</span>
-      </div>
+  <!-- Navigation Tabs -->
+  <nav class="nav-tabs">
+    <button class="tab-btn active" onclick="openTab('desktop-tab', this)">DESKTOP</button>
+    <button class="tab-btn" onclick="openTab('notebook-tab', this)">NOTEBOOK</button>
+    <button class="tab-btn" onclick="openTab('booth-tab', this)">PHOTOBOOTH</button>
+  </nav>
+
+  <!-- TAB 1: MAIN DESKTOP -->
+  <main id="desktop-tab" class="tab-content active">
+    <section class="panel" style="width: 260px;">
+      <div class="panel-header"><span>[ QUICK LINKS ]</span></div>
       <div class="panel-body">
-        <ul class="link-list">
-          <li><a href="https://github.com" target="_blank"><span>></span> GITHUB</a></li>
-          <li><a href="https://notion.so" target="_blank"><span>></span> NOTION</a></li>
-          <li><a href="https://youtube.com" target="_blank"><span>></span> YOUTUBE</a></li>
-          <li><a href="https://pinterest.com" target="_blank"><span>></span> PINTEREST</a></li>
-        </ul>
+        <div style="display:flex; gap:4px;">
+          <input type="text" id="link-title" placeholder="Name..." style="width:50%;">
+          <input type="text" id="link-url" placeholder="URL..." style="width:50%;">
+          <button onclick="addLink()">+</button>
+        </div>
+        <div id="link-container" class="link-list" style="margin-top:8px;"></div>
       </div>
     </section>
 
-    <!-- Center Interactive Workspace (Notes + Photobooth) -->
-    <div style="display: flex; flex-direction: column; gap: 12px;">
-      
-      <!-- Private Scratchpad -->
-      <section class="panel" style="flex-grow: 1;">
-        <div class="panel-header">
-          <span>[ NOTES ]</span>
-          <span>02</span>
-        </div>
-        <div class="panel-body">
-          <textarea id="notes-input" placeholder="Start typing... Everything here auto-saves locally to your machine."></textarea>
-        </div>
-      </section>
+    <section class="panel" style="flex-grow: 1;">
+      <div class="panel-header"><span>[ QUICK SCRATCHPAD ]</span></div>
+      <div class="panel-body">
+        <textarea id="scratchpad" style="width:100%; height:100%; resize:none;" placeholder="Quick notes auto-save locally..."></textarea>
+      </div>
+    </section>
+  </main>
 
-      <!-- WebRTC Monochromatic Photobooth -->
-      <section class="panel">
+  <!-- TAB 2: NOTION-STYLE NOTEBOOK -->
+  <main id="notebook-tab" class="tab-content">
+    <div class="notion-container">
+      <div class="pages-sidebar">
         <div class="panel-header">
-          <span>[ PHOTOBOOTH ]</span>
-          <span>03</span>
+          <span>[ PAGES ]</span>
+          <button onclick="createPage()">+ NEW</button>
         </div>
-        <div class="panel-body booth-container">
-          <video id="webcam-view" autoplay playsinline></video>
-          <div class="booth-controls">
-            <button onclick="startCamera()">START CAM</button>
-            <button onclick="takeSnapshot()">CAPTURE</button>
-          </div>
-        </div>
-      </section>
+        <div id="page-list" style="flex-grow:1; overflow-y:auto;"></div>
+      </div>
 
+      <div class="editor-body">
+        <div class="editor-toolbar">
+          <input type="text" id="editor-title-input" class="editor-title" placeholder="Untitled Page..." oninput="saveCurrentPage()">
+          <label class="tab-btn" style="cursor: pointer; padding: 4px 8px; margin:0;">
+            + ADD IMAGE
+            <input type="file" id="image-loader" accept="image/*" onchange="insertImage(event)" style="display: none;">
+          </label>
+        </div>
+        
+        <textarea id="editor-content-input" class="editor-content" placeholder="Start typing page content here..." oninput="saveCurrentPage()"></textarea>
+        
+        <div id="image-gallery" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;"></div>
+      </div>
     </div>
+  </main>
 
-    <!-- Right Reminders Frame -->
-    <section class="panel">
+  <!-- TAB 3: DEDICATED PHOTOBOOTH -->
+  <main id="booth-tab" class="tab-content">
+    <section class="panel" style="width: 100%;">
       <div class="panel-header">
-        <span>[ REMINDERS ]</span>
-        <span>04</span>
-      </div>
-      <div class="panel-body">
-        <div style="display: flex; gap: 6px;">
-          <input type="text" id="reminder-input" placeholder="New task..." onkeydown="if(event.key==='Enter') addReminder()">
-          <button onclick="addReminder()">ADD</button>
+        <span>[ RETRO PHOTOBOOTH ]</span>
+        <div>
+          <label style="font-size:0.75rem;">FRAME: </label>
+          <select id="frame-select" onchange="changeFrame()" style="font-family:inherit;">
+            <option value="none">NONE</option>
+            <option value="frame-digicam">Y2K DIGICAM</option>
+            <option value="frame-mspaint">MS PAINT</option>
+          </select>
         </div>
-        <div id="reminder-list" style="display: flex; flex-direction: column; gap: 6px; margin-top: 6px;"></div>
+      </div>
+      <div class="panel-body" style="align-items: center; justify-content: center; gap: 12px;">
+        <div class="booth-stage">
+          <video id="webcam-feed" autoplay playsinline></video>
+          <div id="frame-layer" class="frame-overlay"></div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button onclick="startCamera()">START CAM</button>
+          <button onclick="takeSnapshot()">CAPTURE PHOTO</button>
+        </div>
       </div>
     </section>
-
   </main>
 
   <script>
-    // Live Clock Update
-    function updateClock() {
-      const now = new Date();
-      document.getElementById('clock').innerText = now.toLocaleTimeString('en-US', { hour12: false });
+    // Live Clock
+    setInterval(() => {
+      document.getElementById('clock').innerText = new Date().toLocaleTimeString('en-US', { hour12: false });
+    }, 1000);
+
+    // Tab Switching
+    function openTab(tabId, btn) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      btn.classList.add('active');
     }
-    setInterval(updateClock, 1000);
-    updateClock();
 
-    // Persistent Notes via localStorage
-    const notesInput = document.getElementById('notes-input');
-    notesInput.value = localStorage.getItem('nshy_notes') || '';
-    notesInput.addEventListener('input', () => {
-      localStorage.setItem('nshy_notes', notesInput.value);
-    });
-
-    // Local Reminders System
-    function loadReminders() {
-      const items = JSON.parse(localStorage.getItem('nshy_reminders') || '[]');
-      const container = document.getElementById('reminder-list');
+    // Links Management
+    function loadLinks() {
+      const links = JSON.parse(localStorage.getItem('nshy_links') || '[]');
+      const container = document.getElementById('link-container');
       container.innerHTML = '';
-      items.forEach((item, index) => {
+      links.forEach((item, index) => {
         const div = document.createElement('div');
-        div.className = 'reminder-item';
+        div.className = 'link-item';
         div.innerHTML = `
-          <span>• ${escapeHtml(item)}</span>
-          <button class="remove-btn" onclick="removeReminder(${index})">×</button>
+          <a href="${item.url}" target="_blank">> ${escapeHtml(item.title)}</a>
+          <button onclick="removeLink(${index})" style="border:none; background:transparent;">×</button>
         `;
         container.appendChild(div);
       });
     }
 
-    function addReminder() {
-      const input = document.getElementById('reminder-input');
-      if (!input.value.trim()) return;
-      const items = JSON.parse(localStorage.getItem('nshy_reminders') || '[]');
-      items.push(input.value.trim());
-      localStorage.setItem('nshy_reminders', JSON.stringify(items));
-      input.value = '';
-      loadReminders();
+    function addLink() {
+      const title = document.getElementById('link-title').value.trim();
+      let url = document.getElementById('link-url').value.trim();
+      if (!title || !url) return;
+      if (!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url;
+      
+      const links = JSON.parse(localStorage.getItem('nshy_links') || '[]');
+      links.push({ title, url });
+      localStorage.setItem('nshy_links', JSON.stringify(links));
+      document.getElementById('link-title').value = '';
+      document.getElementById('link-url').value = '';
+      loadLinks();
     }
 
-    function removeReminder(index) {
-      const items = JSON.parse(localStorage.getItem('nshy_reminders') || '[]');
-      items.splice(index, 1);
-      localStorage.setItem('nshy_reminders', JSON.stringify(items));
-      loadReminders();
+    function removeLink(index) {
+      const links = JSON.parse(localStorage.getItem('nshy_links') || '[]');
+      links.splice(index, 1);
+      localStorage.setItem('nshy_links', JSON.stringify(links));
+      loadLinks();
+    }
+    loadLinks();
+
+    // Scratchpad Auto-Save
+    const scratchpad = document.getElementById('scratchpad');
+    scratchpad.value = localStorage.getItem('nshy_scratchpad') || '';
+    scratchpad.addEventListener('input', () => {
+      localStorage.setItem('nshy_scratchpad', scratchpad.value);
+    });
+
+    // Notion-Style Notebook Engine
+    let pages = JSON.parse(localStorage.getItem('nshy_pages') || '[{"id":1,"title":"Main Page","content":"","images":[]}]');
+    let activePageId = pages[0]?.id || 1;
+
+    function renderPages() {
+      const list = document.getElementById('page-list');
+      list.innerHTML = '';
+      pages.forEach(p => {
+        const div = document.createElement('div');
+        div.className = `page-item ${p.id === activePageId ? 'active' : ''}`;
+        div.innerHTML = `
+          <span onclick="selectPage(${p.id})" style="flex-grow:1;">${escapeHtml(p.title || 'Untitled')}</span>
+          <span onclick="deletePage(${p.id})" style="color:#888; cursor:pointer;">×</span>
+        `;
+        list.appendChild(div);
+      });
     }
 
-    function escapeHtml(text) {
-      return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    function selectPage(id) {
+      activePageId = id;
+      const page = pages.find(p => p.id === id);
+      if (page) {
+        document.getElementById('editor-title-input').value = page.title || '';
+        document.getElementById('editor-content-input').value = page.content || '';
+        renderPageImages(page.images || []);
+      }
+      renderPages();
     }
-    loadReminders();
 
-    // Camera / Photobooth Module
+    function createPage() {
+      const newPage = { id: Date.now(), title: "Untitled Page", content: "", images: [] };
+      pages.push(newPage);
+      activePageId = newPage.id;
+      savePages();
+      selectPage(newPage.id);
+    }
+
+    function saveCurrentPage() {
+      const page = pages.find(p => p.id === activePageId);
+      if (page) {
+        page.title = document.getElementById('editor-title-input').value;
+        page.content = document.getElementById('editor-content-input').value;
+        savePages();
+        renderPages();
+      }
+    }
+
+    function deletePage(id) {
+      if (pages.length <= 1) return;
+      pages = pages.filter(p => p.id !== id);
+      if (activePageId === id) activePageId = pages[0].id;
+      savePages();
+      selectPage(activePageId);
+    }
+
+    function savePages() {
+      localStorage.setItem('nshy_pages', JSON.stringify(pages));
+    }
+
+    // Image Upload & Rendering Logic
+    function insertImage(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const base64Image = e.target.result;
+        const page = pages.find(p => p.id === activePageId);
+        if (page) {
+          if (!page.images) page.images = [];
+          page.images.push(base64Image);
+          savePages();
+          renderPageImages(page.images);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function renderPageImages(images = []) {
+      const gallery = document.getElementById('image-gallery');
+      gallery.innerHTML = '';
+      images.forEach((imgData, index) => {
+        const wrap = document.createElement('div');
+        wrap.style.cssText = 'position: relative; border: 2px solid var(--border-dark); background: #000;';
+        wrap.innerHTML = `
+          <img src="${imgData}" style="max-width: 180px; max-height: 180px; display: block; filter: grayscale(100%);">
+          <button onclick="removeImage(${index})" style="position: absolute; top: 2px; right: 2px; background: #fff; border: 1px solid #000; cursor: pointer; padding: 0 4px;">×</button>
+        `;
+        gallery.appendChild(wrap);
+      });
+    }
+
+    function removeImage(index) {
+      const page = pages.find(p => p.id === activePageId);
+      if (page && page.images) {
+        page.images.splice(index, 1);
+        savePages();
+        renderPageImages(page.images);
+      }
+    }
+
+    selectPage(activePageId);
+
+    // Photobooth Engine
+    function changeFrame() {
+      const frameLayer = document.getElementById('frame-layer');
+      const val = document.getElementById('frame-select').value;
+      frameLayer.className = 'frame-overlay ' + (val !== 'none' ? val : '');
+      
+      if (val === 'frame-digicam') {
+        frameLayer.innerHTML = `
+          <div style="display:flex; justify-content:space-between;">
+            <span>● REC</span>
+            <span>BATTERY [||||]</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+            <span>ISO 400</span>
+            <span>${new Date().toLocaleDateString()}</span>
+          </div>
+        `;
+      } else {
+        frameLayer.innerHTML = '';
+      }
+    }
+
     async function startCamera() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        document.getElementById('webcam-view').srcObject = stream;
+        document.getElementById('webcam-feed').srcObject = stream;
       } catch (err) {
-        alert('Webcam permission denied or unavailable.');
+        alert('Webcam access failed.');
       }
     }
 
     function takeSnapshot() {
-      const video = document.getElementById('webcam-view');
-      if (!video.srcObject) {
-        alert('Please start the camera first.');
-        return;
-      }
+      const video = document.getElementById('webcam-feed');
+      if (!video.srcObject) return alert('Start camera first.');
+      
       const canvas = document.createElement('canvas');
-      canvas.width = video.videoWidth || 640;
-      canvas.height = video.videoHeight || 480;
+      canvas.width = 640; canvas.height = 480;
       const ctx = canvas.getContext('2d');
       
-      // Apply monochrome filter onto captured frame
       ctx.filter = 'grayscale(100%) contrast(115%)';
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
       
       const imgUrl = canvas.toDataURL('image/png');
       const win = window.open();
       if (win) {
-        win.document.write(`
-          <html style="background:#000; display:flex; justify-content:center; align-items:center; height:100vh;">
-            <body style="margin:0;">
-              <img src="${imgUrl}" style="border: 2px solid #fff; max-width: 90vw;"/>
-            </body>
-          </html>
-        `);
+        win.document.write(`<body style="background:#000; display:flex; justify-content:center; align-items:center; height:100vh; margin:0;"><img src="${imgUrl}" style="border:2px solid #fff;"/></body>`);
       }
+    }
+
+    // Backup & Restore Logic
+    function exportData() {
+      const backupData = {
+        scratchpad: localStorage.getItem('nshy_scratchpad'),
+        pages: localStorage.getItem('nshy_pages'),
+        links: localStorage.getItem('nshy_links'),
+        timestamp: new Date().toISOString()
+      };
+
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `nshy_desktop_backup_${Date.now()}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+
+    function importData(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const imported = JSON.parse(e.target.result);
+          if (imported.scratchpad) localStorage.setItem('nshy_scratchpad', imported.scratchpad);
+          if (imported.pages) localStorage.setItem('nshy_pages', imported.pages);
+          if (imported.links) localStorage.setItem('nshy_links', imported.links);
+          
+          alert('System restored successfully! Reloading...');
+          window.location.reload();
+        } catch (err) {
+          alert('Invalid backup file format.');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function escapeHtml(text) {
+      return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
   </script>
 </body>
